@@ -1,0 +1,37 @@
+{
+    "name": "dbd.gg-bot",
+    "version": "1.0.0",
+    "description": "Twitch bot for dbd.gg",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "prod": "webpack -p --progress --config ./webpack.prod.config.js",
+        "watch": "webpack -w",
+        "start": "webpack -w"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/stephenpoole/dbd.gg-bot.git"
+    },
+    "author": "Stephen Poole",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/stephenpoole/dbd.gg-bot/issues"
+    },
+    "homepage": "https://github.com/stephenpoole/dbd.gg-bot#readme",
+    "dependencies": {
+        "@babel/core": "^7.0.0-beta.44",
+        "bluebird": "^3.5.1",
+        "request": "^2.85.0",
+        "request-promise": "^4.2.2",
+        "tmi.js": "^1.2.1",
+        "uuid": "^3.2.1"
+    },
+    "devDependencies": {
+        "@babel/preset-env": "^7.0.0-beta.44",
+        "babel-core": "^6.26.0",
+        "webpack": "^4.5.0",
+        "webpack-cli": "^2.0.14",
+        "webpack-node-externals": "^1.7.2"
+    }
+}
