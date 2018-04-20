@@ -7,12 +7,15 @@ export class EchoCommand extends Command {
             clients,
             'echo',
             ['!echo', '!say'],
-            [ChatTypes.COMMAND, ChatTypes.WHISPER],
-            1
+            [ChatTypes.COMMAND, ChatTypes.WHISPER]
         );
     }
 
     execute(channel, userstate, params = []) {
-        this.respond(channel, userstate, params.toString());
+        this.respond(
+            channel,
+            userstate,
+            params.reduce((iterator, value) => iterator + ' ' + value)
+        );
     }
 }

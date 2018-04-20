@@ -5,14 +5,12 @@ export class Command {
         clients,
         name = 'Command',
         triggers = [],
-        chatTypes = [ChatTypes.COMMAND],
-        paramCount = 0
+        chatTypes = [ChatTypes.COMMAND]
     ) {
         this.clients = clients;
         this.triggers = triggers;
         this.name = name;
         this.chatTypes = chatTypes;
-        this.paramCount = paramCount;
         this.bound = [];
 
         if (typeof this.triggers === 'string') {
@@ -40,37 +38,13 @@ export class Command {
     }
 
     _params(message) {
-        let lastParam = '',
-            result = [];
-
-        const params = message.split(' ').slice(1);
-
-        if (params.length === 1) {
-            return params;
-        }
-        params.map((value, index) => {
-            if (index < this.paramCount) {
-                result.push(value);
-            } else {
-                const key = this.paramCount - 1;
-                if (result.length === this.paramCount - 1) {
-                    result[key] = '';
-                }
-                result[key] += ' ' + value;
-            }
-        });
-        console.log(result);
-        return result;
+        return message.split(' ').slice(1);
     }
 
     _trigger(channel, userstate, message, self) {
         if (self) {
             return;
         }
-
-        // if (message.charAt(0) === '!') {
-        //     message = message.slice(1);
-        // }
 
         const command = message.substring(0, message.indexOf(' ')) || message;
         let shouldExecute = false;
@@ -82,11 +56,6 @@ export class Command {
         }
 
         const params = this._params(message);
-
-        if (params.length < this.paramCount) {
-            this.error(channel, userstate, ErrorTypes.PARAM_COUNT);
-            return;
-        }
 
         if (shouldExecute) {
             this.execute(channel, userstate, params, self);
@@ -106,13 +75,20 @@ export class Command {
     error(channel, userstate, error, context = '') {
         let message = '';
         switch (error) {
-            case ErrorTypes.PARAM_COUNT:
-                message = `This command requires ${
-                    this.paramCount
-                } parameters.`;
-                break;
             case ErrorTypes.NOT_ALLOWED:
                 message = `You can't do that.`;
+                break;
+            case ErrorTypes.BUILD_NOT_FOUND:
+                message = `That build doesn't exist.`;
+                break;
+            case ErrorTypes.CHANNEL_NOT_FOUND:
+                message = "That channel doesn't exist.";
+                break;
+            case ErrorTypes.MISSING_ID:
+                message = 'Build [id] is required.';
+                break;
+            case ErrorTypes.INVALID_ID:
+                message = 'Invalid build [id].';
                 break;
             default:
                 message = 'An error occurred.';
@@ -122,7 +98,7 @@ export class Command {
         this.respond(
             channel,
             userstate,
-            `${message} ${context.length ? '(' + context + ')' : ''}`
+            `@${userstate.username} ${message} ${context}`
         );
     }
 

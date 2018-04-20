@@ -1,5 +1,6 @@
 import { ChatTypes, ErrorTypes } from '../Enum';
 import { Command } from './command';
+import { API } from '../services/API';
 
 export class AllowCommand extends Command {
     constructor(clients) {
@@ -7,8 +8,7 @@ export class AllowCommand extends Command {
             clients,
             'allow',
             ['!allow'],
-            [ChatTypes.COMMAND, ChatTypes.WHISPER],
-            0
+            [ChatTypes.COMMAND, ChatTypes.WHISPER]
         );
     }
 
@@ -30,11 +30,15 @@ export class AllowCommand extends Command {
             return;
         }
 
-        this.respond(
-            channel,
-            userstate,
-            `I can now join @${target}'s channel. PogChamp`
-        );
-        // remove blacklist from db
+        try {
+            await API.allow({ channel: target });
+            this.respond(
+                channel,
+                userstate,
+                `I can now join @${target} 's channel. PogChamp`
+            );
+        } catch (error) {
+            this.error(channel, userstate);
+        }
     }
 }

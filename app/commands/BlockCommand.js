@@ -1,5 +1,6 @@
 import { ChatTypes, ErrorTypes } from '../Enum';
 import { Command } from './command';
+import { API } from '../services/API';
 
 export class BlockCommand extends Command {
     constructor(clients) {
@@ -7,8 +8,7 @@ export class BlockCommand extends Command {
             clients,
             'block',
             ['!block'],
-            [ChatTypes.COMMAND, ChatTypes.WHISPER],
-            0
+            [ChatTypes.COMMAND, ChatTypes.WHISPER]
         );
     }
 
@@ -30,12 +30,16 @@ export class BlockCommand extends Command {
             return;
         }
 
-        await this.clients.main.part(target);
-        this.respond(
-            channel,
-            userstate,
-            `Left @${target}'s channel forever. BibleThump`
-        );
-        // add blacklist to db
+        try {
+            this.clients.main.part(target);
+            await API.block({ channel: target });
+            this.respond(
+                channel,
+                userstate,
+                `Left @${target} 's channel forever. BibleThump`
+            );
+        } catch (error) {
+            this.error(channel, userstate);
+        }
     }
 }

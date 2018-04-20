@@ -2,6 +2,7 @@ import * as tmi from 'tmi.js';
 import 'request-promise';
 import { Env, Config } from './services/Env';
 import * as Command from './commands';
+import { API } from './services/API';
 const credentials = require('../credentials.json');
 
 export class Client {
@@ -48,7 +49,22 @@ export class Client {
         group.connect();
     }
 
+    async initialize() {
+        try {
+            const channels = await API.channels();
+
+            channels.map(value => {
+                if (!value.blocked && value.join) {
+                    this.clients.main.join(value.channel);
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
     onConnected() {
+        this.initialize();
         this.clients.main.color('Red');
 
         this.commands.push(
@@ -56,7 +72,8 @@ export class Client {
             new Command.EchoCommand(this.clients),
             new Command.LeaveCommand(this.clients),
             new Command.BlockCommand(this.clients),
-            new Command.AllowCommand(this.clients)
+            new Command.AllowCommand(this.clients),
+            new Command.ViewBuildCommand(this.clients)
         );
     }
 }
