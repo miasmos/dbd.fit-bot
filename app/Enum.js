@@ -10,7 +10,9 @@ export const ErrorTypes = {
     BUILD_NOT_FOUND: 1,
     CHANNEL_NOT_FOUND: 2,
     MISSING_ID: 3,
-    INVALID_ID: 4
+    INVALID_ID: 4,
+    MISSING_CHANNEL: 5,
+    INVALID_CHANNEL: 6
 };
 
 export const BuildOutputs = {

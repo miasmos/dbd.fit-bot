@@ -20,6 +20,14 @@ export class JoinCommand extends Command {
             target = userstate.username;
         }
 
+        if (typeof target === 'undefined') {
+            this.error(channel, userstate, ErrorTypes.MISSING_CHANNEL);
+            return;
+        } else if (target.length < 4 || target.length > 25) {
+            this.error(channel, userstate, ErrorTypes.INVALID_CHANNEL);
+            return;
+        }
+
         try {
             const json = await API.channel({ channel: target });
             if (!!json && json.blocked) {

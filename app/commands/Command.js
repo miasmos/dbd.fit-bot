@@ -90,6 +90,12 @@ export class Command {
             case ErrorTypes.INVALID_ID:
                 message = 'Invalid build [id].';
                 break;
+                case ErrorTypes.MISSING_CHANNEL:
+                message = '[channel] is required.';
+                break;
+            case ErrorTypes.INVALID_CHANNEL:
+                message = 'Invalid [channel].';
+                break;
             default:
                 message = 'An error occurred.';
                 break;

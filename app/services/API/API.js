@@ -4,7 +4,7 @@ import { Env } from '../Env';
 
 class APIClass {
     constructor() {
-        this.url = `${Config.protocol}://${Config.host}:${Config.port}`;
+        this.url = Env.isDevelopment() ? `${Config.protocol}://${Config.host}:${Config.port}` : `${Config.protocol}://${Config.host}`;
     }
 
     block(params) {
@@ -52,7 +52,8 @@ class APIClass {
             })
                 .then(json => resolve(json.data))
                 .catch(error => {
-                    reject(error.response.body);
+                    console.error(error)
+                    reject('response' in error && 'body' in error.response ? error.response.body : error)
                 });
         });
     }

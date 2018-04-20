@@ -1,8 +1,8 @@
 {
     "production": {
         "protocol": "https",
-        "host": "localhost",
-        "port": 3000
+        "host": "api.dbd.gg",
+        "port": 80
     },
     "development": {
         "protocol": "http",

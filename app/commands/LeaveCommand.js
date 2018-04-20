@@ -18,6 +18,14 @@ export class LeaveCommand extends Command {
             target = params[0] || '';
         } else {
             target = userstate.username;
+		}
+		
+		if (typeof target === 'undefined') {
+            this.error(channel, userstate, ErrorTypes.MISSING_CHANNEL);
+            return;
+        } else if (target.length < 4 || target.length > 25) {
+            this.error(channel, userstate, ErrorTypes.INVALID_CHANNEL);
+            return;
         }
 
         try {
